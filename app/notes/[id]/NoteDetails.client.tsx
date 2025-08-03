@@ -6,11 +6,11 @@ import { fetchNoteById } from "@/lib/api";
 import { Note } from "@/types/note";
 import css from './NoteDetails.module.css'
 
-type NoteDetailsProps = {
+type Props = {
   id: string
 }
 
-export default function NoteDetailsClient({id}: NoteDetailsProps) {
+export default function NoteDetailsClient({id}: Props) {
    
 
     const { data, isLoading, isError, } = useQuery<Note>({

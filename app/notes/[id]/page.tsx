@@ -3,13 +3,17 @@ import { getQueryClient } from "@/lib/tanstack";
 import { fetchNoteById } from "@/lib/api";
 import NoteDetailsClient from "./NoteDetails.client";
 
-type PageProps = {
-  params: { id: string };
+type Props = {
+  params: {
+    id: string;
+  };
 };
 
-export default async function NoteDetailsPage({ params }: PageProps) {
+
+export default async function NoteDetailsPage({ params }: Props) {
+  
     const queryClient = getQueryClient();
-    const noteId = params.id;
+    const noteId = params.id
   
       
     await queryClient.prefetchQuery({
