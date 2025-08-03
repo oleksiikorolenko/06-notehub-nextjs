@@ -2,7 +2,7 @@
 
 import { Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
-import css from "../NoteForm/NoteForm.module.css";
+import css from "./NoteForm.module.css";
 
 const validationSchema = Yup.object({
     title: Yup.string().min(3).max(50).required(),
@@ -13,20 +13,21 @@ const validationSchema = Yup.object({
 
     interface NoteFormProps {
         onSubmit: (note: { title: string; content: string; tag: string }) => void;
-    
+        onClose: () => void;
 }
 
-export const NoteForm = ({ onSubmit }: NoteFormProps) => {
-   
+export const NoteForm = ({ onSubmit, onClose }: NoteFormProps) => {
+    
     return (
         <Formik initialValues={{ title: '', content: '', tag: 'Todo' }}
             validationSchema={validationSchema}
             onSubmit={(values, actions) => {
                 onSubmit(values);
                 actions.resetForm();
+                onClose();
             }}
         >
-            {() => (
+            {({resetForm}) => (
                 <Form className={css.form}>
                     <div className={css.formGroup}>
                         <label htmlFor="title">Title</label>
@@ -61,9 +62,15 @@ export const NoteForm = ({ onSubmit }: NoteFormProps) => {
                        <button
                             type="submit"
                             className={css.submitButton}
+    
                         >
                             Create note
                         </button>
+                        <button
+                            type="button"
+                            onClick={() => resetForm()}
+                            className={css.cancelButton}
+                        >Cancel</button>
                     </div>
                 </Form>
             )}

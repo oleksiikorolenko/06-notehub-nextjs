@@ -7,7 +7,7 @@ import Link from "next/link";
 
 interface NoteListProps{
     notes: Note[];
-    onDelete: (id: number) => void;
+    onDelete: (id: string) => void;
 }
 
 export const NoteList = ({ notes, onDelete }: NoteListProps) => {
