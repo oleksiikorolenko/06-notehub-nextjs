@@ -3,29 +3,28 @@ import { getQueryClient } from "@/lib/tanstack";
 import { fetchNoteById } from "@/lib/api";
 import NoteDetailsClient from "./NoteDetails.client";
 
-type Props = {
-  params: {
-    id: string;
-  };
+
+
+interface PageProps {
+  params: Promise<{id: string}>;
 };
 
 
-export default async function NoteDetailsPage({ params }: Props) {
+export default async function NoteDetailsPage({ params }: PageProps) {
   
     const queryClient = getQueryClient();
-    const noteId = params.id
+    const {id} = await params;
   
       
     await queryClient.prefetchQuery({
-    queryKey: ['note', noteId],
-    queryFn: () => fetchNoteById(noteId),
+    queryKey: ['note', id],
+    queryFn: () => fetchNoteById(id),
   });
-
 
     
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>
-            <NoteDetailsClient id={noteId} />
+            <NoteDetailsClient id={id} />
         </HydrationBoundary>
     );
 }
