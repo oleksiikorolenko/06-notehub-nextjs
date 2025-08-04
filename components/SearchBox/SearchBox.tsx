@@ -20,4 +20,4 @@ export default function SearchBox({ value, onChange }: SearchBoxProps) {
             onChange={handleChange}
         />
     );
-};
+}

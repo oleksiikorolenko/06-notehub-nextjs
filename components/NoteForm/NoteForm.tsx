@@ -3,6 +3,9 @@
 import { Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import css from "./NoteForm.module.css";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createNote } from "@/lib/api";
+
 
 const validationSchema = Yup.object({
     title: Yup.string().min(3).max(50).required(),
@@ -11,18 +14,27 @@ const validationSchema = Yup.object({
 });
 
 
-    interface NoteFormProps {
-        onSubmit: (note: { title: string; content: string; tag: string }) => void;
+    type NoteFormProps = {
         onClose: () => void;
 }
 
-export const NoteForm = ({ onSubmit, onClose }: NoteFormProps) => {
-    
+export default function NoteForm ({ onClose }: NoteFormProps) {
+    const queryClient = useQueryClient();
+
+     const mutation = useMutation({
+         mutationFn: createNote,
+         onSuccess: () => {
+             queryClient.invalidateQueries({ queryKey: ['notes'] });
+             onClose();
+         },
+            });
+
+
     return (
         <Formik initialValues={{ title: '', content: '', tag: 'Todo' }}
             validationSchema={validationSchema}
             onSubmit={(values, actions) => {
-                onSubmit(values);
+                mutation.mutate(values);
                 actions.resetForm();
                 onClose();
             }}
@@ -68,7 +80,10 @@ export const NoteForm = ({ onSubmit, onClose }: NoteFormProps) => {
                         </button>
                         <button
                             type="button"
-                            onClick={() => resetForm()}
+                            onClick={() => {
+                                resetForm();
+                                onClose();
+                             }}
                             className={css.cancelButton}
                         >Cancel</button>
                     </div>

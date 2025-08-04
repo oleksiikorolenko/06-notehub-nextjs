@@ -17,4 +17,4 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
             activeClassName={css.active}
         />
     );
-};
+}

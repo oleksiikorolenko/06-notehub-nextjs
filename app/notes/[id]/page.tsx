@@ -4,8 +4,7 @@ import { fetchNoteById } from "@/lib/api";
 import NoteDetailsClient from "./NoteDetails.client";
 
 
-
-interface PageProps {
+type PageProps = {
   params: Promise<{id: string}>;
 };
 
