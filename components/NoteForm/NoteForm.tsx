@@ -27,6 +27,9 @@ export default function NoteForm ({ onClose }: NoteFormProps) {
              queryClient.invalidateQueries({ queryKey: ['notes'] });
              onClose();
          },
+         onError: (error) => {
+            console.error('Create note failed:', error);
+          },
             });
 
 
@@ -34,9 +37,17 @@ export default function NoteForm ({ onClose }: NoteFormProps) {
         <Formik initialValues={{ title: '', content: '', tag: 'Todo' }}
             validationSchema={validationSchema}
             onSubmit={(values, actions) => {
-                mutation.mutate(values);
-                actions.resetForm();
-                onClose();
+                mutation.mutate(values, {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({ queryKey: ['notes'] });
+                        actions.resetForm();
+                            onClose();
+                    },
+                    onError: (error) => {
+            console.error('Create note failed:', error);
+          },
+                });
+                
             }}
         >
             {({resetForm}) => (
