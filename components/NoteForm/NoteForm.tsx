@@ -14,7 +14,7 @@ const validationSchema = Yup.object({
 });
 
 
-    type NoteFormProps = {
+    interface NoteFormProps {
         onClose: () => void;
 }
 
@@ -36,19 +36,9 @@ export default function NoteForm ({ onClose }: NoteFormProps) {
     return (
         <Formik initialValues={{ title: '', content: '', tag: 'Todo' }}
             validationSchema={validationSchema}
-            onSubmit={(values, actions) => {
-                mutation.mutate(values, {
-                    onSuccess: () => {
-                        queryClient.invalidateQueries({ queryKey: ['notes'] });
-                        actions.resetForm();
-                            onClose();
-                    },
-                    onError: (error) => {
-            console.error('Create note failed:', error);
-          },
-                });
-                
-            }}
+            onSubmit={(values) => {
+                mutation.mutate(values);
+                }}
         >
             {({resetForm}) => (
                 <Form className={css.form}>
